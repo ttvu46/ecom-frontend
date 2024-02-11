@@ -17,6 +17,7 @@ class UtilApi {
 
   static getToken() {
     const user = JSON.parse(localStorage.getItem("user"));
+    console.log(user);
 
     if (user && user.accessToken) {
       return "Bearer " + user.accessToken;
@@ -29,8 +30,46 @@ class UtilApi {
     localStorage.setItem("user", JSON.stringify({ accessToken: token }));
   }
 
-  static signUp(signupRequest) {
-    return "a";
+  static async signUp(signupRequest) {
+    let config = {
+      method: "post",
+      url: "http://localhost:4444/api/auth/signup",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: signupRequest,
+    };
+
+    const response = await axios(config);
+    return response;
+  }
+
+  static async signUp(signupRequest) {
+    let config = {
+      method: "post",
+      url: "http://localhost:4444/api/auth/signup",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: signupRequest,
+    };
+
+    const response = await axios(config);
+    return response;
+  }
+
+  static async signIn(signinRequest) {
+    let config = {
+      method: "post",
+      url: "http://localhost:4444/api/auth/signin",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: signinRequest,
+    };
+
+    const response = await axios(config);
+    return response;
   }
 }
 

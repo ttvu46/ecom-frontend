@@ -12,7 +12,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
+import UtilApi from "../UtilApi";
 function Copyright(props) {
   return (
     <Typography
@@ -36,13 +36,20 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
+    const loginRequest = {
+      username: data.get("username"),
       password: data.get("password"),
-    });
+    };
+
+    try {
+      const response = await UtilApi.signIn(loginRequest);
+      UtilApi.storeToken(response);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -51,13 +58,12 @@ export default function SignIn() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <Avatar sx={{ m: 1, marginTop: "100px", bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">

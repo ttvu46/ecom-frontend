@@ -12,6 +12,8 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import UtilApi from "../UtilApi";
+import AlertWrapper from "./AlertWrapper";
+import { useState } from "react";
 
 function Copyright(props) {
   return (
@@ -37,38 +39,47 @@ const defaultTheme = createTheme();
 
 export default function SignUp() {
   const navigate = useNavigate();
+  const [alertSeverity, setAlertSeverity] = useState("");
+  const [message, setMessage] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const signupRequest = {
-      username: data.get("email"),
+      username: data.get("username"),
       password: data.get("password"),
     };
 
     try {
-      const response = UtilApi.signUp(signupRequest);
-      console.log(response);
-      navigate("/signin");
-      console.log(response);
+      const response = await UtilApi.signUp(signupRequest);
+      setMessage(response.data + " Back to login.");
+      setAlertSeverity("success");
+      setTimeout(() => {
+        navigate("/signin");
+      }, 4000);
     } catch (e) {
       console.log(e);
+      setAlertSeverity("error");
+      setMessage(e.response.data);
     }
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
+      <Container
+        style={{ height: "100%", position: "relative" }}
+        component="main"
+        maxWidth="xs"
+      >
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main", marginTop: "100px" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -130,7 +141,10 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
+        {alertSeverity && message && AlertWrapper(alertSeverity, message)}
+        <Container style={{ bottom: "5px", position: "absolute" }}>
+          <Copyright sx={{ mt: 5 }} />
+        </Container>
       </Container>
     </ThemeProvider>
   );
