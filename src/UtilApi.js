@@ -1,18 +1,23 @@
 import axios from "axios";
 
+const request_url = process.env.REACT_APP_URL;
 class UtilApi {
-  static async landingPage(token) {
+  static async productList(token) {
     let config = {
       method: "get",
       maxBodyLength: Infinity,
-      url: "http://localhost:4444/api/profile/user",
+      url: `${request_url}/api/products`,
       headers: {
         "Content-Type": "application/json",
         Authorization: token,
       },
     };
-    const response = await axios(config);
-    return response;
+    try {
+      const response = await axios(config);
+      return response.data;
+    } catch (e) {
+      throw new Error(e);
+    }
   }
 
   static getToken() {
@@ -33,7 +38,7 @@ class UtilApi {
   static async signUp(signupRequest) {
     let config = {
       method: "post",
-      url: "http://localhost:4444/api/auth/signup",
+      url: `${request_url}/api/auth/signup`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -47,7 +52,7 @@ class UtilApi {
   static async signUp(signupRequest) {
     let config = {
       method: "post",
-      url: "http://localhost:4444/api/auth/signup",
+      url: `${request_url}/api/auth/signup`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -61,7 +66,7 @@ class UtilApi {
   static async signIn(signinRequest) {
     let config = {
       method: "post",
-      url: "http://localhost:4444/api/auth/signin",
+      url: `${request_url}/api/auth/signin`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -70,6 +75,24 @@ class UtilApi {
 
     const response = await axios(config);
     return response;
+  }
+
+  static async getProductInfo(id, token){
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: `${request_url}/api/products`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    };
+    try {
+      const response = await axios(config);
+      return response.data;
+    } catch (e) {
+      throw new Error(e);
+    }
   }
 }
 

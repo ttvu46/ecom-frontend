@@ -6,15 +6,17 @@ import reportWebVitals from "./reportWebVitals";
 import { MemoryRouter, Routes, Route, BrowserRouter } from "react-router-dom";
 import SignIn from "./Component/Signin";
 import SignUp from "./Component/Signup";
-import LandingPage from "./Component/LandingPage";
+import ProductPage from "./Component/ProductPage";
+import ProductInfo from "./Component/ProductInfo";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <Routes>
-      <Route path="" element={<LandingPage />} />
+      <Route path="/" element={<ProductPage />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
+      <Route path="/products/*" element={<ProductInfo />} />
     </Routes>
   </BrowserRouter>
 );

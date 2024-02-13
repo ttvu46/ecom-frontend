@@ -13,6 +13,10 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import UtilApi from "../UtilApi";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import AlertWrapper from "./AlertWrapper";
+
 function Copyright(props) {
   return (
     <Typography
@@ -22,8 +26,8 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link color="inherit" href="">
+        ecom
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -36,9 +40,14 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+  const navigate = useNavigate();
+  const [alertSeverity, setAlertSeverity] = useState("");
+  const [message, setMessage] = useState("");
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    setAlertSeverity("");
     const loginRequest = {
       username: data.get("username"),
       password: data.get("password"),
@@ -46,15 +55,26 @@ export default function SignIn() {
 
     try {
       const response = await UtilApi.signIn(loginRequest);
-      UtilApi.storeToken(response);
+      UtilApi.storeToken(response.data);
+      setMessage("Sign in sucessfully.");
+      setAlertSeverity("success");
+      setTimeout(() => {
+        navigate("/");
+      }, 500);
     } catch (e) {
       console.log(e);
+      setAlertSeverity("error");
+      setMessage(e.response.data);
     }
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
+      <Container
+        style={{ height: "100%", position: "relative" }}
+        component="main"
+        maxWidth="xs"
+      >
         <CssBaseline />
         <Box
           sx={{
@@ -121,7 +141,10 @@ export default function SignIn() {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+        {alertSeverity && message && AlertWrapper(alertSeverity, message)}
+        <Container style={{ bottom: "5px", position: "absolute" }}>
+          <Copyright sx={{ mt: 8, mb: 4 }} />
+        </Container>
       </Container>
     </ThemeProvider>
   );

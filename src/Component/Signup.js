@@ -52,11 +52,12 @@ export default function SignUp() {
 
     try {
       const response = await UtilApi.signUp(signupRequest);
+
       setMessage(response.data + " Back to login.");
       setAlertSeverity("success");
       setTimeout(() => {
         navigate("/signin");
-      }, 4000);
+      }, 3000);
     } catch (e) {
       console.log(e);
       setAlertSeverity("error");
