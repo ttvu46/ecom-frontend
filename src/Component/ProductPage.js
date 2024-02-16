@@ -17,9 +17,11 @@ export default function ProductPage() {
       try {
         const result = await UtilApi.productList(token);
         setProducts(result);
-        console.log(products);
       } catch (e) {
-        navigate("/signin");
+        const statusCode = Number(e.message);
+        if (statusCode < 500 && statusCode >= 400) {
+          navigate("/signin");
+        }
       }
     }
   };

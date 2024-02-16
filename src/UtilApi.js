@@ -16,7 +16,7 @@ class UtilApi {
       const response = await axios(config);
       return response.data;
     } catch (e) {
-      throw new Error(e);
+      throw new Error(e.response.status);
     }
   }
 
@@ -77,11 +77,11 @@ class UtilApi {
     return response;
   }
 
-  static async getProductInfo(id, token){
+  static async getProductInfo(id, token) {
     let config = {
       method: "get",
       maxBodyLength: Infinity,
-      url: `${request_url}/api/products`,
+      url: `${request_url}/api/products/${id}`,
       headers: {
         "Content-Type": "application/json",
         Authorization: token,
@@ -91,8 +91,27 @@ class UtilApi {
       const response = await axios(config);
       return response.data;
     } catch (e) {
-      throw new Error(e);
+      throw new Error(e.response.status);
     }
+  }
+
+  static getCartItemsNumber(token) {
+    return 1; 
+    // let config = {
+    //   method: "get",
+    //   maxBodyLength: Infinity,
+    //   url: `${request_url}/api/products/${id}`,
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: token,
+    //   },
+    // };
+    // try {
+    //   const response = await axios(config);
+    //   return response.data;
+    // } catch (e) {
+    //   throw new Error(e.response.status);
+    // }
   }
 }
 
