@@ -3,7 +3,7 @@ import axios from "axios";
 const request_url = process.env.REACT_APP_URL;
 class UtilApi {
   static async productList(token) {
-    let config = {
+    const config = {
       method: "get",
       maxBodyLength: Infinity,
       url: `${request_url}/api/products`,
@@ -36,7 +36,7 @@ class UtilApi {
   }
 
   static async signUp(signupRequest) {
-    let config = {
+    const config = {
       method: "post",
       url: `${request_url}/api/auth/signup`,
       headers: {
@@ -64,7 +64,7 @@ class UtilApi {
   }
 
   static async signIn(signinRequest) {
-    let config = {
+    const config = {
       method: "post",
       url: `${request_url}/api/auth/signin`,
       headers: {
@@ -78,7 +78,7 @@ class UtilApi {
   }
 
   static async getProductInfo(id, token) {
-    let config = {
+    const config = {
       method: "get",
       maxBodyLength: Infinity,
       url: `${request_url}/api/products/${id}`,
@@ -95,23 +95,53 @@ class UtilApi {
     }
   }
 
-  static getCartItemsNumber(token) {
-    return 1; 
-    // let config = {
-    //   method: "get",
-    //   maxBodyLength: Infinity,
-    //   url: `${request_url}/api/products/${id}`,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: token,
-    //   },
-    // };
-    // try {
-    //   const response = await axios(config);
-    //   return response.data;
-    // } catch (e) {
-    //   throw new Error(e.response.status);
-    // }
+  static async addToCart(productId, quantity, token) {
+    const config = {
+      method: "post",
+      url: `${request_url}/api/carts/cart`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+      data: { productId, quantity },
+    };
+
+    const response = await axios(config);
+    return response;
+  }
+
+  static async getCartItemsNumber(token) {
+    const config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: `${request_url}/api/carts/total`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    };
+    try {
+      const response = await axios(config);
+      console.log(response);
+      return response.data;
+    } catch (e) {
+      throw new Error(e.response);
+    }
+  }
+
+  static async getCarts(token){
+    const config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: `${request_url}/api/carts`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    };
+
+    const response = await axios(config); 
+    return response.data; 
   }
 }
 

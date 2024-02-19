@@ -11,7 +11,10 @@ export default function ProductInfo() {
   const productId = queryParams.get("id");
   const [productQuantity, setProductQuantity] = useState(1);
   const [productInfo, setProductInfo] = useState({});
+  const [cartItemsNumber, setCartItemNumber] = useState(0);
+
   const navigate = useNavigate();
+
   const getProduct = async () => {
     const token = UtilApi.getToken();
     try {
@@ -26,18 +29,29 @@ export default function ProductInfo() {
     }
   };
 
-  const addToCartAction = () => {
-    console.log("hIHIHI");
-    console.log(productQuantity);
-    console.log(productId);
+  const addToCartAction = async () => {
+    const token = UtilApi.getToken();
+    const result = await UtilApi.addToCart(productId, productQuantity, token);
+    await getCartItemsNumber();
+    console.log(result.data);
   };
 
+  const getCartItemsNumber = async () => {
+    const token = UtilApi.getToken();
+    const result = await UtilApi.getCartItemsNumber(token);
+    try {
+      setCartItemNumber(result);
+    } catch (e) {
+      setCartItemNumber(0);
+    }
+  };
   useEffect(() => {
     getProduct();
+    getCartItemsNumber();
   }, []);
   return (
     <>
-      <MenuAppBar />
+      <MenuAppBar cartItemsNumber={cartItemsNumber} />
       {productInfo && (
         <Container style={{ width: "90%", height: "100%" }}>
           <Grid container spacing={2}>
@@ -45,7 +59,7 @@ export default function ProductInfo() {
               <img height="350px" src={productInfo.url}></img>
             </Grid>
             <Grid item xs={6} style={{ paddingTop: "6%" }}>
-              <Typography variant="h4">{productInfo.productName}</Typography>
+              <Typography variant="h6">{productInfo.productName}</Typography>
 
               <p>{productInfo.description}</p>
               <Container style={{ marginTop: "50px" }}>

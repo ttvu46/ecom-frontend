@@ -8,6 +8,7 @@ import MenuAppBar from "./AppBar";
 export default function ProductPage() {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
+  const [cartItemsNumber, setCartItemNumber] = useState(0);
 
   const getProducts = async () => {
     const token = UtilApi.getToken();
@@ -26,13 +27,24 @@ export default function ProductPage() {
     }
   };
 
+  const getCartItemsNumber = async () => {
+    const token = UtilApi.getToken();
+    const result = await UtilApi.getCartItemsNumber(token);
+    try {
+      setCartItemNumber(result);
+    } catch (e) {
+      setCartItemNumber(0);
+    }
+  };
+
   useEffect(() => {
     getProducts();
+    getCartItemsNumber();
   }, []);
 
   return (
     <>
-      <MenuAppBar />
+      <MenuAppBar cartItemsNumber={cartItemsNumber} />
       <Container
         style={{
           display: "flex",

@@ -57,7 +57,7 @@ export default function SignUp() {
       setAlertSeverity("success");
       setTimeout(() => {
         navigate("/signin");
-      }, 3000);
+      }, 500);
     } catch (e) {
       console.log(e);
       setAlertSeverity("error");
