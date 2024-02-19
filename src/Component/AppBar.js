@@ -1,16 +1,13 @@
 import * as React from "react";
-import { useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import Badge from "@mui/material/Badge";
-import UtilApi from "../UtilApi";
 import { Button, Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 

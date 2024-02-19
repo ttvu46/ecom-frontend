@@ -1,9 +1,6 @@
 import * as React from "react";
 import {
-  CardMedia,
-  Paper,
   TableRow,
-  TableHead,
   Container,
   TableCell,
   TableBody,
