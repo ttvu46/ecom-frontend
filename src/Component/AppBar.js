@@ -10,6 +10,7 @@ import Menu from "@mui/material/Menu";
 import Badge from "@mui/material/Badge";
 import { Button, Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function MenuAppBar(props) {
   const [auth, setAuth] = React.useState(true);
@@ -20,6 +21,7 @@ export default function MenuAppBar(props) {
     setAuth(event.target.checked);
   };
 
+  const totalItems = useSelector((state) => state.cart.totalItems);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -54,7 +56,7 @@ export default function MenuAppBar(props) {
           }}
           color="inherit"
         >
-          <Badge badgeContent={props.cartItemsNumber} color="primary">
+          <Badge badgeContent={totalItems} color="primary">
             <ShoppingCartIcon />
           </Badge>
         </IconButton>

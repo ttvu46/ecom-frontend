@@ -4,6 +4,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Container, Grid, Typography, Button } from "@mui/material";
 import MenuAppBar from "./AppBar";
 import NumberInput from "./NumberInput";
+import { useSelector, useDispatch } from "react-redux";
+import { addToCart } from "./../cart-action-and-reducer";
 
 export default function ProductInfo() {
   const location = useLocation();
@@ -11,8 +13,9 @@ export default function ProductInfo() {
   const productId = queryParams.get("id");
   const [productQuantity, setProductQuantity] = useState(1);
   const [productInfo, setProductInfo] = useState({});
-  const [cartItemsNumber, setCartItemNumber] = useState(0);
 
+  const totalItems = useSelector((state) => state.cart.totalItems);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const getProduct = async () => {
@@ -32,26 +35,27 @@ export default function ProductInfo() {
   const addToCartAction = async () => {
     const token = UtilApi.getToken();
     const result = await UtilApi.addToCart(productId, productQuantity, token);
-    await getCartItemsNumber();
+    // await getCartItemsNumber();
+    dispatch(addToCart());
     console.log(result.data);
   };
 
-  const getCartItemsNumber = async () => {
-    const token = UtilApi.getToken();
-    const result = await UtilApi.getCartItemsNumber(token);
-    try {
-      setCartItemNumber(result);
-    } catch (e) {
-      setCartItemNumber(0);
-    }
-  };
+  // const getCartItemsNumber = async () => {
+  //   const token = UtilApi.getToken();
+  //   const result = await UtilApi.getCartItemsNumber(token);
+  //   try {
+  //     setCartItemNumber(result);
+  //   } catch (e) {
+  //     setCartItemNumber(0);
+  //   }
+  // };
   useEffect(() => {
     getProduct();
-    getCartItemsNumber();
+    // getCartItemsNumber();
   }, []);
   return (
     <>
-      <MenuAppBar cartItemsNumber={cartItemsNumber} />
+      <MenuAppBar cartItemsNumber={totalItems} />
       {productInfo && (
         <Container style={{ width: "90%", height: "100%" }}>
           <Grid container spacing={2}>

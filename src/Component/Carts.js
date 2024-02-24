@@ -3,20 +3,22 @@ import { useEffect, useState } from "react";
 import MenuAppBar from "./AppBar";
 import CartTable from "./CartTable";
 import { useNavigate } from "react-router-dom";
+import { useSelector} from 'react-redux';
 
 export default function Carts() {
   const navigate = useNavigate();
-  const [cartItemsNumber, setCartItemNumber] = useState(0);
+  const totalItems = useSelector((state) => state.cart.totalItems);
   const [cart, setCart] = useState([]);
-  const getCartItemsNumber = async () => {
-    const token = UtilApi.getToken();
-    const result = await UtilApi.getCartItemsNumber(token);
-    try {
-      setCartItemNumber(result);
-    } catch (e) {
-      setCartItemNumber(0);
-    }
-  };
+
+  //   const getCartItemsNumber = async () => {
+  //     const token = UtilApi.getToken();
+  //     const result = await UtilApi.getCartItemsNumber(token);
+  //     try {
+  //       setCartItemNumber(result);
+  //     } catch (e) {
+  //       setCartItemNumber(0);
+  //     }
+  //   };
 
   const getCart = async () => {
     const token = UtilApi.getToken();
@@ -29,13 +31,12 @@ export default function Carts() {
   };
 
   useEffect(() => {
-    getCartItemsNumber();
     getCart();
   }, []);
 
   return (
     <>
-      <MenuAppBar cartItemsNumber={cartItemsNumber}></MenuAppBar>
+      <MenuAppBar cartItemsNumber={totalItems}></MenuAppBar>
       <CartTable data={cart}></CartTable>
     </>
   );
